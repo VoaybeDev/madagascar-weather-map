@@ -1,10 +1,9 @@
-import { Marker, Popup } from 'react-leaflet'
+import { Marker } from 'react-leaflet'
 import L from 'leaflet'
 
-const WeatherMarker = ({ city }) => {
-  const { name, lat, lon, temp, description, humidity, wind, icon, feelsLike } = city
+const WeatherMarker = ({ city, onSelect }) => {
+  const { name, lat, lon, temp } = city
 
-  // Icône personnalisée avec la température
   const tempIcon = L.divIcon({
     className: 'weather-icon',
     html: `
@@ -17,29 +16,18 @@ const WeatherMarker = ({ city }) => {
         font-size: 13px;
         white-space: nowrap;
         box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        cursor: pointer;
       ">${temp}°C</div>
     `,
     iconAnchor: [20, 10]
   })
 
   return (
-    <Marker position={[lat, lon]} icon={tempIcon}>
-      <Popup>
-        <div style={{ minWidth: '160px', fontFamily: 'sans-serif' }}>
-          <h3 style={{ margin: '0 0 8px', color: '#2c3e50' }}>{name}</h3>
-          <img
-            src={`https://openweathermap.org/img/wn/${icon}@2x.png`}
-            alt={description}
-            style={{ width: 50 }}
-          />
-          <p style={{ margin: '4px 0', textTransform: 'capitalize' }}>{description}</p>
-          <hr style={{ margin: '6px 0' }} />
-          <p style={{ margin: '4px 0' }}>🌡️ <b>{temp}°C</b> (ressenti {feelsLike}°C)</p>
-          <p style={{ margin: '4px 0' }}>💧 Humidité : <b>{humidity}%</b></p>
-          <p style={{ margin: '4px 0' }}>💨 Vent : <b>{wind} m/s</b></p>
-        </div>
-      </Popup>
-    </Marker>
+    <Marker
+      position={[lat, lon]}
+      icon={tempIcon}
+      eventHandlers={{ click: () => onSelect(city) }}
+    />
   )
 }
 
