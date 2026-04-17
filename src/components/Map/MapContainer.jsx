@@ -8,14 +8,21 @@ import Legend from '../UI/Legend'
 import Header from '../Layout/Header'
 import LoadingSpinner from '../UI/LoadingSpinner'
 import Sidebar from '../Layout/Sidebar'
+import SearchBar from '../UI/SearchBar'
 
 const MadagascarMap = () => {
-  const { weatherData, loading, error } = useWeatherData()
+  const { weatherData, loading, error, lastUpdate } = useWeatherData()
   const [selectedCity, setSelectedCity] = useState(null)
 
   return (
     <div style={{ position: 'relative', height: '100vh' }}>
-      <Header />
+      <Header lastUpdate={lastUpdate} />
+      {!loading && (
+        <SearchBar
+          weatherData={weatherData}
+          onSelect={setSelectedCity}
+        />
+      )}
       {loading && <LoadingSpinner />}
       {error && (
         <div style={{
